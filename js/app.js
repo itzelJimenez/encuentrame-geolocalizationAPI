@@ -3,7 +3,7 @@ function initMap(){
     var mapaContenedor = document.getElementById("map");
   	var coordenadasLaboratoria= {lat:19.417639, lng:-99.164815};
  
-  	var mapa= new google.maps.Map(mapaContenedor,{
+  	var mapa = new google.maps.Map(mapaContenedor,{
        zoom:18,
         center: coordenadasLaboratoria
       });
@@ -13,35 +13,37 @@ function initMap(){
       title: "Laboratoria México",
       draggable: true,
     });
-  }
+
+    var inputOrigen = document.getElementById("punto-partida");
+    var inputDestino = document.getElementById("punto-destino");
+    new google.maps.places.Autocomplete(inputOrigen);
+    new google.maps.places.Autocomplete(inputDestino);
   
-function buscar(){
-  if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(funcionExito, funcionError);
+  
+  function buscar(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(funcionExito, funcionError);
+    }
   }
-}
 
-
-var funcionExito = function(posicion){
   var latitud,longitud;
-  latitud = posicion.coords.latitude;
-  longitud = posicion.coords.longitude; 
-  console.log(latitud, longitud);
-  var mapa= new google.maps.Map(document.getElementById("map"),{
-       zoom:18,
-        center: {lat:latitud, lng:longitud}
-      });
-  var miUbicación = new google.maps.Marker({
-    position: {lat:latitud, lng:longitud},
-    map: mapa,
-    title: "My ubicación",
-    draggable: true,
-  });
-  
-};
+  var funcionExito = function(posicion){
+    latitud = posicion.coords.latitude;
+    longitud = posicion.coords.longitude; 
+    mapa.setZoom(18);
+    mapa.setCenter({lat:latitud, lng:longitud});
+    var miUbicacion = new google.maps.Marker({
+      position: {lat:latitud, lng:longitud},
+      map: mapa,
+      title: "My ubicación",
+      draggable: true,
+    });
+    
+  };
 
-var funcionError = function(error){
-  alert("Tenemos un problema con encontrar tu ubicación.");
-};
+  var funcionError = function(error){
+    alert("Tenemos un problema con encontrar tu ubicación.");
+  };
 
-document.getElementById("encuentrame").addEventListener("click", buscar);
+  document.getElementById("encuentrame").addEventListener("click", buscar);
+}
